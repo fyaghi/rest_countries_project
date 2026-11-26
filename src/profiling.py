@@ -1,30 +1,14 @@
-"""
-profiling.py - Milestone 1, Step 2: Data Profiling
-Reads the raw flattened dataset and reports data quality issues:
-missing values, data types, summary statistics, region counts,
-duplicates, outliers and suspicious values.
-
-Run from the project root:  python src/profiling.py
-Outputs:
-    reports/profiling_summary.txt   (everything printed below, saved)
-    reports/missing_values.csv      (missing count + % per column)
-    reports/outliers.csv            (countries flagged as outliers)
-"""
-
 import os
-
 import pandas as pd
 
 RAW_PATH = os.path.join("data", "raw", "countries_flat.csv")
 REPORT_DIR = "reports"
 
-lines = []  # everything we print is also saved to a text file
-
+lines = []
 
 def report(text=""):
     print(text)
     lines.append(str(text))
-
 
 def section(title):
     report("")
@@ -32,9 +16,7 @@ def section(title):
     report(title)
     report("=" * 60)
 
-
 def iqr_outliers(df, column):
-    """Return rows outside 1.5 * IQR for a numeric column."""
     q1 = df[column].quantile(0.25)
     q3 = df[column].quantile(0.75)
     iqr = q3 - q1
@@ -43,20 +25,16 @@ def iqr_outliers(df, column):
     mask = (df[column] < low) | (df[column] > high)
     return df[mask], low, high
 
-
 def main():
     os.makedirs(REPORT_DIR, exist_ok=True)
     df = pd.read_csv(RAW_PATH)
 
-    # 1) Basic shape
     section("1. DATASET SHAPE")
     report(f"Rows: {df.shape[0]}   Columns: {df.shape[1]}")
 
-    # 2) Data types
     section("2. DATA TYPES")
     report(df.dtypes.to_string())
 
-    # 3) Missing values
     section("3. MISSING VALUES")
     missing = pd.DataFrame({
         "missing_count": df.isna().sum(),
@@ -72,23 +50,19 @@ def main():
     report("\nCountries with no language:")
     report(df.loc[df["languages"].isna(), "name_common"].tolist())
 
-    # 4) Summary statistics
     section("4. SUMMARY STATISTICS (population, area)")
     report(df[["population", "area_km2"]].describe().round(2).to_string())
 
-    # 5) Region counts
     section("5. COUNTRIES PER REGION")
     report(df["region"].value_counts(dropna=False).to_string())
     section("5b. COUNTRIES PER SUBREGION")
     report(df["subregion"].value_counts(dropna=False).to_string())
 
-    # 6) Duplicates
     section("6. DUPLICATES")
     report(f"Duplicate cca3 codes: {df['cca3'].duplicated().sum()}")
     report(f"Duplicate common names: {df['name_common'].duplicated().sum()}")
     report(f"Fully duplicated rows: {df.duplicated().sum()}")
 
-    # 7) Suspicious / inconsistent values
     section("7. SUSPICIOUS VALUES")
     report(f"Population = 0: {(df['population'] == 0).sum()}")
     report(f"Area <= 0: {(df['area_km2'] <= 0).sum()}")
@@ -98,7 +72,6 @@ def main():
     report("\nSmallest 5 populations:")
     report(df.nsmallest(5, "population")[["name_common", "population"]].to_string(index=False))
 
-    # 8) Outliers (IQR method)
     section("8. OUTLIERS (IQR method, 1.5 x IQR)")
     df["density"] = df["population"] / df["area_km2"]
     all_outliers = []
@@ -112,11 +85,9 @@ def main():
         all_outliers.append(temp)
     pd.concat(all_outliers).to_csv(os.path.join(REPORT_DIR, "outliers.csv"), index=False)
 
-    # Save the whole report
     with open(os.path.join(REPORT_DIR, "profiling_summary.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
     print("\nSaved -> reports/profiling_summary.txt, missing_values.csv, outliers.csv")
-
 
 if __name__ == "__main__":
     main()
