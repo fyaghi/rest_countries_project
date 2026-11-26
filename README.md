@@ -6,9 +6,9 @@ Data Engineering Lab – Princess Sumaya University for Technology
 ## Team
 | Name | Student ID |
 |------|-----------|
-| Member 1 | 00000000 |
-| Member 2 | 00000000 |
-| Member 3 | 00000000 |
+| Yahia Fawwaz | 20250581 |
+| Feras Yaghi| 20250578 |
+| Joud Himo| 20250400 |
 
 ## Overview
 We extracted all countries from the REST Countries API, flattened the nested JSON
