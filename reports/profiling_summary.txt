@@ -1,0 +1,171 @@
+
+============================================================
+1. DATASET SHAPE
+============================================================
+Rows: 254   Columns: 21
+
+============================================================
+2. DATA TYPES
+============================================================
+cca2                  str
+cca3                  str
+name_common           str
+name_official         str
+capital               str
+region                str
+subregion             str
+population          int64
+area_km2          float64
+lat               float64
+lng               float64
+languages             str
+n_languages         int64
+currency_codes        str
+currency_names        str
+n_currencies        int64
+borders               str
+n_borders           int64
+sovereign            bool
+un_member            bool
+landlocked           bool
+
+============================================================
+3. MISSING VALUES
+============================================================
+                missing_count  missing_pct
+borders                    86        33.86
+capital                     5         1.97
+cca2                        5         1.97
+subregion                   5         1.97
+cca3                        4         1.57
+currency_codes              3         1.18
+currency_names              3         1.18
+languages                   1         0.39
+name_common                 0         0.00
+name_official               0         0.00
+area_km2                    0         0.00
+population                  0         0.00
+region                      0         0.00
+n_languages                 0         0.00
+lng                         0         0.00
+lat                         0         0.00
+n_currencies                0         0.00
+n_borders                   0         0.00
+sovereign                   0         0.00
+un_member                   0         0.00
+landlocked                  0         0.00
+
+Countries with no capital:
+['Antarctica', 'Bouvet Island', 'Heard Island and McDonald Islands', 'Macau', 'United States Minor Outlying Islands']
+
+Countries with no currency:
+['Antarctica', 'Bouvet Island', 'Heard Island and McDonald Islands']
+
+Countries with no language:
+['Antarctica']
+
+============================================================
+4. SUMMARY STATISTICS (population, area)
+============================================================
+         population     area_km2
+count  2.540000e+02       254.00
+mean   3.180101e+07    591731.19
+std    1.314225e+08   1895958.75
+min    0.000000e+00         0.44
+25%    2.220078e+05      1439.75
+50%    4.920816e+06     62979.00
+75%    2.055162e+07    353423.75
+max    1.429404e+09  17098242.00
+
+============================================================
+5. COUNTRIES PER REGION
+============================================================
+region
+Africa       60
+Americas     56
+Europe       54
+Asia         52
+Oceania      27
+Antarctic     5
+
+============================================================
+5b. COUNTRIES PER SUBREGION
+============================================================
+subregion
+Caribbean                    28
+Eastern Africa               20
+Western Asia                 19
+Western Africa               17
+Northern Europe              16
+South America                14
+Southern Europe              11
+South-Eastern Asia           11
+Polynesia                    10
+Middle Africa                10
+Southern Asia                 9
+Southeast Europe              9
+Western Europe                8
+Eastern Asia                  8
+Northern Africa               7
+Central America               7
+North America                 7
+Micronesia                    7
+Central Europe                6
+Southern Africa               6
+NaN                           5
+Australia and New Zealand     5
+Melanesia                     5
+Central Asia                  5
+Eastern Europe                4
+
+============================================================
+6. DUPLICATES
+============================================================
+Duplicate cca3 codes: 3
+Duplicate common names: 0
+Fully duplicated rows: 0
+
+============================================================
+7. SUSPICIOUS VALUES
+============================================================
+Population = 0: 2
+Area <= 0: 0
+Not sovereign (territories etc.): 53
+Not UN members: 61
+No land borders (borders empty): 86
+
+Smallest 5 populations:
+                         name_common  population
+                       Bouvet Island           0
+   Heard Island and McDonald Islands           0
+                       South Georgia          30
+                    Pitcairn Islands          35
+United States Minor Outlying Islands         300
+
+============================================================
+8. OUTLIERS (IQR method, 1.5 x IQR)
+============================================================
+
+population: 30 outliers (normal range -30,272,416 to 51,046,047)
+  name_common  population
+        India  1429404000
+        China  1404890000
+United States   341784857
+    Indonesia   290125073
+     Pakistan   241499431
+
+area_km2: 35 outliers (normal range -526,536 to 881,400)
+  name_common   area_km2
+       Russia 17098242.0
+   Antarctica 14000000.0
+       Canada  9984670.0
+        China  9706961.0
+United States  9372610.0
+
+density: 25 outliers (normal range -270 to 534)
+name_common      density
+      Macau 22883.333333
+     Monaco 19236.138614
+  Singapore  8744.366197
+  Hong Kong  6791.757246
+  Gibraltar  6366.000000
