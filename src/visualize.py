@@ -1,16 +1,7 @@
-"""
-visualize.py - Milestone 1, Step 4: Exploratory Visualizations
-Reads the clean dataset and saves 6 charts as PNG images.
-It also prints a short finding for each chart, to help write the explanations.
-
-Run from the project root:  python src/visualize.py
-Outputs: reports/figures/*.png
-"""
-
 import os
 
 import matplotlib
-matplotlib.use("Agg")  # save images without opening windows
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -40,7 +31,6 @@ def main():
     df = pd.read_csv(CLEAN_PATH, keep_default_na=False, na_values=[""])
     inhabited = df[(df["population"] > 0) & (df["region"] != "Antarctic")]
 
-    # ---------- Chart 1: Total population by region ----------
     q1 = "Q1: Which regions hold most of the world's population?"
     pop = inhabited.groupby("region")["population"].sum().sort_values() / 1e9
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -54,7 +44,6 @@ def main():
     print(f"   {q1}\n   Finding: Asia = {share['Asia']:.1f}% of the total; "
           f"Oceania = {share['Oceania']:.1f}%.\n")
 
-    # ---------- Chart 2: Population distribution per region (log scale) ----------
     q2 = "Q2: How spread out are country populations within each region?"
     regions = ["Africa", "Americas", "Asia", "Europe", "Oceania"]
     data = [inhabited.loc[inhabited["region"] == r, "log10_population"] for r in regions]
@@ -75,7 +64,6 @@ def main():
           f"({medians.iloc[0]:,.0f}) and highest in {medians.index[-1]} "
           f"({medians.iloc[-1]:,.0f}).\n")
 
-    # ---------- Chart 3: Area vs population (log-log scatter) ----------
     q3 = "Q3: Do bigger countries have bigger populations?"
     fig, ax = plt.subplots(figsize=(8, 6))
     for r in regions:
@@ -98,7 +86,6 @@ def main():
     print(f"   {q3}\n   Finding: correlation between log(area) and log(population) "
           f"= {corr:.2f}.\n")
 
-    # ---------- Chart 4: Top 10 most densely populated sovereign states ----------
     q4 = "Q4: Which sovereign states are the most crowded?"
     top = (df[df["entity_type"] == "Sovereign state"]
            .nlargest(10, "density").sort_values("density"))
@@ -111,7 +98,6 @@ def main():
     print(f"   {q4}\n   Finding: most crowded = {top['name_common'].iloc[-1]} "
           f"({top['density'].iloc[-1]:,.0f} people/km²).\n")
 
-    # ---------- Chart 5: Language and currency diversity by region ----------
     q5 = "Q5: Which regions have the most languages and currencies per country?"
     div = inhabited.groupby("region")[["n_languages", "n_currencies"]].mean().loc[regions]
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -129,7 +115,6 @@ def main():
           f"({div['n_languages'].max():.2f}); single country with most = "
           f"{most_lang['name_common'].iloc[0]} ({most_lang['n_languages'].iloc[0]}).\n")
 
-    # ---------- Chart 6: World bubble map of population ----------
     q6 = "Q6: Where in the world are the biggest populations located?"
     fig, ax = plt.subplots(figsize=(11, 6))
     size = inhabited["population"] / inhabited["population"].max() * 2500 + 5
