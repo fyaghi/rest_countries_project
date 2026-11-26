@@ -1,14 +1,3 @@
-"""
-clean.py - Milestone 1, Step 3: Data Cleaning
-Reads the raw flattened dataset, applies documented cleaning decisions,
-and saves a clean dataset plus a cleaning log.
-
-Run from the project root:  python src/clean.py
-Outputs:
-    data/clean/countries_clean.csv
-    reports/cleaning_log.txt
-"""
-
 import os
 
 import numpy as np
@@ -34,79 +23,61 @@ def main():
     os.makedirs(CLEAN_DIR, exist_ok=True)
     os.makedirs(REPORT_DIR, exist_ok=True)
 
-    # DECISION 1: Read "NA" as text, not as missing.
-    # Why: Namibia's ISO code is "NA". pandas treats "NA" as missing by default,
-    # which wrongly made Namibia's cca2 empty. Only truly empty cells are missing.
+    # D1: Namibia's code is "NA" so we don't let pandas read it as missing
     df = pd.read_csv(RAW_PATH, keep_default_na=False, na_values=[""])
     rows_before = len(df)
     note(f"D1  Read raw data: {rows_before} rows. 'NA' kept as text "
          f"(Namibia cca2 = {df.loc[df['name_common'] == 'Namibia', 'cca2'].iloc[0]}).")
 
-    # DECISION 2: Strip extra spaces from all text columns.
-    # Why: hidden spaces break grouping and joins (e.g. 'Asia ' vs 'Asia').
+    # D2: remove extra spaces so values like "Asia " and "Asia" match
     for col in df.columns:
         if is_text(df[col]):
             df[col] = df[col].str.strip()
     note("D2  Stripped leading/trailing spaces from all text columns.")
 
-    # DECISION 3: Remove duplicate countries (by common name).
-    # Why: each country must appear once. cca3 cannot be used because some
-    # entities have no code (see D4).
+    # D3: remove duplicates by name (not cca3 because some have no code)
     dupes = df.duplicated(subset="name_common").sum()
     df = df.drop_duplicates(subset="name_common")
     note(f"D3  Duplicate countries removed: {dupes}.")
 
-    # DECISION 4: KEEP partially recognised states with no ISO code, and FLAG them.
-    # Why: they are real entities with population and area, so dropping them
-    # loses data. We cannot invent ISO codes, so codes stay empty.
+    # D4: keep countries with no ISO code but flag them, they are still real places
     df["has_iso_code"] = df["cca3"].notna()
     no_code = df.loc[~df["has_iso_code"], "name_common"].tolist()
     note(f"D4  Kept and flagged {len(no_code)} entities without ISO codes: {no_code}.")
 
-    # DECISION 5: Fill missing subregion for the Antarctic region with 'Antarctic'.
-    # Why: the Antarctic region has no subregions, so the value is not unknown,
-    # it simply equals the region.
+    # D5: Antarctic has no subregion so we just use "Antarctic"
     mask = df["subregion"].isna() & (df["region"] == "Antarctic")
     df.loc[mask, "subregion"] = "Antarctic"
     note(f"D5  Filled subregion = 'Antarctic' for {mask.sum()} Antarctic entities.")
 
-    # DECISION 6: Standardise inconsistent subregion names.
-    # Why: 'Southeast Europe' uses a different style than 'South-Eastern Asia'.
+    # D6: make this subregion name match the style of the others
     df["subregion"] = df["subregion"].replace({"Southeast Europe": "South-Eastern Europe"})
     note("D6  Renamed 'Southeast Europe' -> 'South-Eastern Europe' for consistency.")
 
-    # DECISION 7: Empty borders mean 'no land borders' (islands), not missing data.
-    # Why: n_borders is already 0 for these rows. We fill text with 'None'
-    # and add a clear flag.
+    # D7: empty borders = islands with no neighbours, not missing data
     df["has_land_borders"] = df["n_borders"] > 0
     islands = df["borders"].isna().sum()
     df["borders"] = df["borders"].fillna("None")
     note(f"D7  {islands} entities with no land borders: borders = 'None', flag has_land_borders.")
 
-    # DECISION 8: Missing capital -> 'No capital' + flag.
-    # Why: Antarctica and uninhabited islands genuinely have no capital.
+    # D8: some places really have no capital (like Antarctica)
     df["has_capital"] = df["capital"].notna()
     note(f"D8  {(~df['has_capital']).sum()} entities have no capital: "
          f"{df.loc[~df['has_capital'], 'name_common'].tolist()}.")
     df["capital"] = df["capital"].fillna("No capital")
 
-    # DECISION 9: Missing languages / currencies -> 'None'.
-    # Why: they occur only for uninhabited places; the counts are already 0.
+    # D9: no language or currency only happens for uninhabited places
     for col in ["languages", "currency_codes", "currency_names"]:
         n = df[col].isna().sum()
         df[col] = df[col].fillna("None")
         note(f"D9  {col}: filled {n} missing with 'None'.")
 
-    # DECISION 10: Population = 0 is KEPT (true value) and FLAGGED as uninhabited.
-    # Why: these islands really have no permanent population. Imputing a number
-    # would be false. They are excluded only from log-scale charts.
+    # D10: population 0 is real (nobody lives there) so we keep it and flag it
     df["is_uninhabited"] = df["population"] == 0
     note(f"D10 Flagged {df['is_uninhabited'].sum()} uninhabited entities: "
          f"{df.loc[df['is_uninhabited'], 'name_common'].tolist()}.")
 
-    # DECISION 11: Classify each entity.
-    # Why: the API mixes sovereign states, territories and partially recognised
-    # states. Analysis can then filter to the right group.
+    # D11: label each row as sovereign state, territory or partially recognised
     df["entity_type"] = np.select(
         [~df["has_iso_code"], df["sovereign"] == True],
         ["Partially recognised", "Sovereign state"],
@@ -114,8 +85,7 @@ def main():
     )
     note("D11 entity_type counts: " + df["entity_type"].value_counts().to_dict().__str__())
 
-    # DECISION 12: Outliers are KEPT and FLAGGED (IQR method), not removed.
-    # Why: India, China, Russia, Monaco etc. are real values, not errors.
+    # D12: outliers like China and India are real so we flag them instead of deleting
     df["density"] = (df["population"] / df["area_km2"]).round(2)
     for col in ["population", "area_km2", "density"]:
         q1, q3 = df[col].quantile([0.25, 0.75])
@@ -123,14 +93,12 @@ def main():
         df[f"is_outlier_{col}"] = df[col] > high
         note(f"D12 {col}: {df[f'is_outlier_{col}'].sum()} outliers flagged (kept).")
 
-    # DECISION 13: Add log10 columns for skewed variables.
-    # Why: population and area are heavily right-skewed (mean >> median),
-    # so log scale makes charts readable. log of 0 is undefined -> left empty.
+    # D13: log columns make the charts easier to read (log of 0 is left empty)
     df["log10_population"] = np.log10(df["population"].where(df["population"] > 0)).round(3)
     df["log10_area"] = np.log10(df["area_km2"].where(df["area_km2"] > 0)).round(3)
     note("D13 Added log10_population and log10_area.")
 
-     # FINAL CHECKS
+    # final check of what is still missing
     note("")
     note(f"Rows before: {rows_before}   Rows after: {len(df)}")
     remaining = df.isna().sum()
@@ -139,6 +107,7 @@ def main():
          "and log10_population for uninhabited):")
     note(remaining.to_string() if len(remaining) else "None")
 
+    # save the clean data and the log
     df = df.sort_values("name_common").reset_index(drop=True)
     out_path = os.path.join(CLEAN_DIR, "countries_clean.csv")
     df.to_csv(out_path, index=False, encoding="utf-8")
