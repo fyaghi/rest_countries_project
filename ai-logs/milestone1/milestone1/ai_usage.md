@@ -1,6 +1,6 @@
 # AI Usage Disclosure – Milestone 1
 
-**Tool used:** Claude
+**Tool used:** ChatGpt
 **Used by:**  Yahia Fawwaz, Feras Yaghi, Joud Himo
 **Date:** 26/11/2026
 
