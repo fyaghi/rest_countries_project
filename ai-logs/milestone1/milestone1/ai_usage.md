@@ -2,19 +2,20 @@
 
 **Tool used:** ChatGpt
 **Used by:**  Yahia Fawwaz, Feras Yaghi, Joud Himo
-**Date:** 26/11/2026
+**Date:** 28/11/2026
 
 ## What AI was used for
-- Step-by-step guidance on setting up Git, cloning the repo, and the project structure.
-- Writing and debugging the Python scripts: extract.py, profiling.py, clean.py, visualize.py.
-- Diagnosing why the original v3.1 API returned an error (the API had been retired)
-  and migrating the extraction to the v5 API with an API key and pagination.
-- Interpreting profiling results (e.g. the Namibia "NA" issue, partially recognised
-  states without ISO codes, islands with no borders) and proposing cleaning decisions.
+- Step-by-step on how to setup GitHub, Vscode.
+- Helping us setup API key and how to keep it hidden.
+- Helping us Connect to the REST Countries API. 
+- Helping us debug our code. Giving us hints to solve our mistakes.
+- Making sure our outputs were correct.
+- How to upload everything on GitHub.
+- Helped us make the PDF look more presentable.
 
 ## What we did ourselves
-- Ran every script, checked the outputs, and verified the data looked correct.
-- Reviewed and accepted each cleaning decision.
+- We wrote the codes with some hints from chatgpt, We dubuged the codes and we ran the codes to see if everthing was wroking.
+- We Reviewed the figuers and wrote the PDF.
 
 ## Transcript
-Full conversation: see transcript.md in this folder.
+- The chatgpt conversation is in transcript.md
