@@ -12,9 +12,10 @@
 - Making sure our outputs were correct.
 - How to upload everything on GitHub.
 - Helped us make the PDF look more presentable.
+- Helped us make the README.md look professional
 
 ## What we did ourselves
-- We wrote the codes with some hints from chatgpt, We dubuged the codes and we ran the codes to see if everthing was wroking.
+- We wrote the codes with some hints from chatgpt, We dubuged the codes and we ran the codes to see if everthing was working.
 - We Reviewed the figuers and wrote the PDF.
 
 ## Transcript
