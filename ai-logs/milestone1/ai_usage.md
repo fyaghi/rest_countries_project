@@ -5,7 +5,7 @@
 **Date:** 28/11/2026
 
 ## What AI was used for
-- Step-by-step on how to setup GitHub, Vscode.
+- Step by step on how to setup GitHub, Vscode.
 - Helping us setup API key and how to keep it hidden.
 - Helping us Connect to the REST Countries API. 
 - Helping us debug our code. Giving us hints to solve our mistakes.
