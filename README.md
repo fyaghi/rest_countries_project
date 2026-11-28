@@ -1,6 +1,6 @@
 # REST Countries Project - Milestone 1
 
-Data Engineering Lab - PSUT
+Data Engineering Project
 
 ## Team Members
 - Yahia Fawwaz - 20250581
