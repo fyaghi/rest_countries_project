@@ -1,25 +1,38 @@
-D1  Read raw data: 254 rows. 'NA' kept as text (Namibia cca2 = NA).
-D2  Stripped leading/trailing spaces from all text columns.
-D3  Duplicate countries removed: 0.
-D4  Kept and flagged 4 entities without ISO codes: ['Abkhazia', 'Northern Cyprus', 'Somaliland', 'South Ossetia'].
-D5  Filled subregion = 'Antarctic' for 5 Antarctic entities.
-D6  Renamed 'Southeast Europe' -> 'South-Eastern Europe' for consistency.
-D7  86 entities with no land borders: borders = 'None', flag has_land_borders.
-D8  5 entities have no capital: ['Antarctica', 'Bouvet Island', 'Heard Island and McDonald Islands', 'Macau', 'United States Minor Outlying Islands'].
-D9  languages: filled 1 missing with 'None'.
-D9  currency_codes: filled 3 missing with 'None'.
-D9  currency_names: filled 3 missing with 'None'.
-D10 Flagged 2 uninhabited entities: ['Bouvet Island', 'Heard Island and McDonald Islands'].
-D11 entity_type counts: {'Sovereign state': 197, 'Territory': 53, 'Partially recognised': 4}
-D12 population: 30 outliers flagged (kept).
-D12 area_km2: 35 outliers flagged (kept).
-D12 density: 25 outliers flagged (kept).
-D13 Added log10_population and log10_area.
+Rows before cleaning: 254
+Rows after cleaning: 254
+Duplicates removed: 0
+Missing ISO codes were kept and flagged.
+Missing text values were replaced with Not listed.
+Countries with no land borders were labelled.
+Subregion names were standardized.
+Zero populations were kept because some territories are uninhabited.
+Outliers were flagged instead of removed because extreme values can be valid.
 
-Rows before: 254   Rows after: 254
-Remaining missing values (expected: only codes for no-ISO entities, and log10_population for uninhabited):
-cca2                4
-cca3                4
-log10_population    2
-
-Saved clean dataset -> data\clean\countries_clean.csv  (254 rows x 32 columns)
+Remaining missing values:
+cca2                     4
+cca3                     4
+name_common              0
+name_official            0
+capital                  0
+region                   0
+subregion                0
+population               0
+area_km2                 0
+lat                      0
+lng                      0
+languages                0
+n_languages              0
+currency_codes           0
+currency_names           0
+n_currencies             0
+borders                  0
+n_borders                0
+sovereign                0
+un_member                0
+landlocked               0
+has_iso_code             0
+density                  0
+is_outlier_population    0
+is_outlier_area_km2      0
+is_outlier_density       0
+dtype: int64
