@@ -12,7 +12,6 @@ headers = {"Authorization": "Bearer " + api_key}
 countries = []
 offset = 0
 
-# Extract all countries
 while True:
     params = {"limit": 100, "offset": offset}
     response = requests.get(url, headers=headers, params=params)
@@ -26,11 +25,9 @@ while True:
 
     offset = offset + 100
 
-# Save raw data
 with open("data/raw/countries_raw.json", "w", encoding="utf-8") as f:
     json.dump(countries, f, indent=2, ensure_ascii=False)
 
-# Flatten the data
 rows = []
 
 for country in countries:

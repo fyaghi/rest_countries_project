@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 df = pd.read_csv("data/clean/countries_clean.csv",
                  keep_default_na=False, na_values=[""])
 
-# Chart 1: Population by region
+
 population = df.groupby("region")["population"].sum() / 1000000
 
 plt.figure()
@@ -19,7 +19,7 @@ plt.close()
 print("Population by region:")
 print(population)
 
-# Chart 2: Population distribution
+
 plt.figure()
 plt.hist(df["population"] / 1000000, bins=20)
 plt.title("Population Distribution")
@@ -32,7 +32,7 @@ plt.close()
 print("\nPopulation statistics:")
 print(df["population"].describe())
 
-# Chart 3: Area vs population
+
 plt.figure()
 plt.scatter(df["area_km2"], df["population"])
 plt.title("Area vs Population")
@@ -42,7 +42,7 @@ plt.tight_layout()
 plt.savefig("reports/figures/area_vs_population.png")
 plt.close()
 
-# Chart 4: Top 10 countries by population density
+
 countries = df[(df["sovereign"] == True) &
                (df["has_iso_code"] == True)]
 
@@ -60,7 +60,6 @@ plt.close()
 print("\nTop 10 countries by density:")
 print(top[["name_common", "density"]])
 
-# Chart 5: Average number of languages by region
 languages = df.groupby("region")["n_languages"].mean()
 
 plt.figure()

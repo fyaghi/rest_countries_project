@@ -7,7 +7,6 @@ summary = "Dataset shape:\n" + str(df.shape)
 
 summary += "\n\nData types:\n" + str(df.dtypes)
 
-# Missing values
 missing = pd.DataFrame()
 missing["missing_count"] = df.isnull().sum()
 missing["missing_pct"] = df.isnull().sum() / len(df) * 100
@@ -16,24 +15,19 @@ missing.to_csv("reports/missing_values.csv")
 
 summary += "\n\nMissing values:\n" + str(missing)
 
-# Summary statistics
 summary += "\n\nSummary statistics:\n"
 summary += str(df[["population", "area_km2"]].describe())
 
-# Countries per region
 summary += "\n\nCountries per region:\n"
 summary += str(df["region"].value_counts())
 
-# Duplicates
 summary += "\n\nDuplicate rows: " + str(df.duplicated().sum())
 summary += "\nDuplicate codes: " + str(df["cca3"].dropna().duplicated().sum())
 summary += "\nDuplicate names: " + str(df["name_common"].duplicated().sum())
 
-# Missing country codes
 summary += "\n\nCountries with missing codes:\n"
 summary += str(df[df["cca3"].isnull()]["name_common"])
 
-# Check population and area
 summary += "\n\nNegative population: " + str((df["population"] < 0).sum())
 summary += "\nZero population: " + str((df["population"] == 0).sum())
 summary += "\nInvalid area: " + str((df["area_km2"] <= 0).sum())
@@ -41,10 +35,8 @@ summary += "\nInvalid area: " + str((df["area_km2"] <= 0).sum())
 summary += "\n\nCountries with zero population:\n"
 summary += str(df[df["population"] == 0]["name_common"])
 
-# Population density
 df.loc[df["area_km2"] > 0, "density"] = df["population"] / df["area_km2"]
 
-# Outliers using IQR
 all_outliers = []
 
 for col in ["population", "area_km2", "density"]:
