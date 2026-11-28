@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv("data/clean/countries_clean.csv",
@@ -13,7 +13,7 @@ plt.title("Total Population by Region")
 plt.xlabel("Region")
 plt.ylabel("Population (millions)")
 plt.tight_layout()
-plt.savefig("reports/figures/chart1_population_by_region.png")
+plt.savefig("reports/figures/population_by_region.png")
 plt.close()
 
 print("Population by region:")
@@ -26,7 +26,7 @@ plt.title("Population Distribution")
 plt.xlabel("Population (millions)")
 plt.ylabel("Number of countries")
 plt.tight_layout()
-plt.savefig("reports/figures/chart2_population_distribution.png")
+plt.savefig("reports/figures/population_distribution.png")
 plt.close()
 
 print("\nPopulation statistics:")
@@ -39,7 +39,7 @@ plt.title("Area vs Population")
 plt.xlabel("Area (km2)")
 plt.ylabel("Population")
 plt.tight_layout()
-plt.savefig("reports/figures/chart3_area_vs_population.png")
+plt.savefig("reports/figures/area_vs_population.png")
 plt.close()
 
 # Chart 4: Top 10 countries by population density
@@ -54,7 +54,7 @@ plt.title("Top 10 Countries by Population Density")
 plt.xlabel("People per km2")
 plt.ylabel("Country")
 plt.tight_layout()
-plt.savefig("reports/figures/chart4_top10_density.png")
+plt.savefig("reports/figures/population_density.png")
 plt.close()
 
 print("\nTop 10 countries by density:")
@@ -69,7 +69,7 @@ plt.title("Average Number of Languages by Region")
 plt.xlabel("Region")
 plt.ylabel("Average number of languages")
 plt.tight_layout()
-plt.savefig("reports/figures/chart5_language_diversity.png")
+plt.savefig("reports/figures/language_diversity.png")
 plt.close()
 
 print("\nAverage languages by region:")
